@@ -130,7 +130,7 @@ def yolo_head(feats, anchors, num_classes, input_shape, calc_loss=False):
         [1, grid_shape[1], 1, 1])
     grid_x = K.tile(K.reshape(K.arange(0, stop=grid_shape[1]), [1, -1, 1, 1]),
         [grid_shape[0], 1, 1, 1])
-    grid = K.concatenate([grid_x, grid_y])
+    grid = K.concatenate([grid_x, grid_y])  # grid shape: (13, 13, 1, 2)
     grid = K.cast(grid, K.dtype(feats))
 
     feats = K.reshape(
@@ -262,7 +262,7 @@ def preprocess_true_boxes(true_boxes, input_shape, anchors, num_classes):
         dtype='float32') for l in range(num_layers)]
 
     # Expand dim to apply broadcasting.
-    anchors = np.expand_dims(anchors, 0)
+    anchors = np.expand_dims(anchors, 0)    # anchors.shape: (1, N, 2)
     anchor_maxes = anchors / 2.
     anchor_mins = -anchor_maxes
     valid_mask = boxes_wh[..., 0]>0
